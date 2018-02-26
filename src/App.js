@@ -78,6 +78,32 @@ class HotTemperatureDisplay extends React.Component {
   }
 }
 
+class BtnDisplay extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+
+
+  handleChange(e) {
+    this.props.onTemperatureChange(e.target.value);
+  }
+
+  render() {
+    const temperature = this.props.temperature;
+    const log = this.props.btnLog;
+    let divArray = [];
+    divArray[0] = <div> {temperature} temp goes here </div>
+    divArray[1] = <div> {temperature} temp goes here </div>
+
+      return (
+           <div>exactly {log} {temperature} freezing </div>
+      );
+  }
+}
+
+
 class TemperatureAdder extends React.Component {
   constructor(props) {
     super(props);
@@ -87,7 +113,11 @@ class TemperatureAdder extends React.Component {
   handleClick(e) {
     console.log("trying to add ten");
     this.props.onTemperatureAdd(e.target.value);
+    this.props.onTemperatureAdd2(e.target.value);
   }
+
+
+
   render() {
     return (
       <button onClick = {this.handleClick}> add ten
@@ -102,11 +132,16 @@ class App extends React.Component {
     this.handleCelsiusChange = this.handleCelsiusChange.bind(this);
     this.handleFahrenheitChange = this.handleFahrenheitChange.bind(this);
     this.addTemp = this.addTemp.bind(this);
-    this.state = {temperature: 0, scale: 'c'};
+    this.updateLog = this.updateLog.bind(this);
+    this.state = {temperature: 0, scale: 'c', btnLog : []};
   }
 
   addTemp(temperature){
     this.setState({temperature: this.state.temperature + 10 })
+  }
+
+  updateLog (btnLog){
+    this.setState({btnLog: this.state.btnLog.concat("you pressed a button") })
   }
 
   handleCelsiusChange(temperature) {
@@ -133,8 +168,13 @@ class App extends React.Component {
          <HotTemperatureDisplay
            temperature={celsius}
           />
+          <BtnDisplay
+            temperature={celsius}
+           />
+
         <TemperatureAdder
           onTemperatureAdd = {this.addTemp}
+          onTemperatureAdd2 = {this.updateLog}
         />
       </div>
     );
